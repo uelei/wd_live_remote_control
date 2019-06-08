@@ -1,5 +1,4 @@
-from requests import request
-
+import requests
 # import keybord
 
 
@@ -80,38 +79,85 @@ def getch():
 
 button_delay = 0.2
 
+
+values ={"up":"n",
+         "ok": "n",
+         "down": "d",
+         "left": "l",
+         "right": "r",
+         }
+
+
+
+def request_action(action):
+    header ={
+        "Cookie": "keepSign=1; user_pw=admin; PHPSESSID=b5b5c97d665826c7bef3e63d290d9daf; online=0",
+        "Origin": "http://192.168.0.13",
+        "Accept-Encoding": "gzip, deflate",
+        "Accept-Language": "pt,en-US;q=0.9,en;q=0.8",
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Accept": "*/*",
+        "Referer": "http://192.168.0.13/Main.php",
+        "X-Requested-With": "XMLHttpRequest",
+        "Connection": "keep-aliv",
+    }
+    r = requests.get("http://192.168.0.13/cgi-bin/toServerValue.cgi",headers=header,data='{"remote":"'+action+'"}')
+
+
+
 while True:
     char = getch().encode()
-
-    if char == b"p":
+    str_c = char.decode("ASCII")
+    if char == b"q":
         print("Stop!")
         exit(0)
 
-    print("c", type(char), char)
-    if char == "a":
-        print("Left pressed")
-        time.sleep(button_delay)
+    print(char,str_c)
+    if b"A" in char:
+        request_action("u")
+    elif b"B" in char:
+        request_action("d")
+    elif b"C" in char:
+        request_action("r")
+    elif b"D" in char:
+        request_action("l")
 
-    elif char == "d":
-        print("Right pressed")
-        time.sleep(button_delay)
+    elif char==b"e" or char ==b"\r":
+        request_action("n")
 
-    elif char == "w":
-        print("Up pressed")
-        time.sleep(button_delay)
+    elif char==b"b":
+        request_action("T")
+    # b'\x1b'
+    # if char == "a":
+    #     print("Left pressed")
+    #     time.sleep(button_delay)
 
-    elif char == "s":
-        print("Down pressed")
-        time.sleep(button_delay)
+    # elif char == "d":
+    #     print("Right pressed")
+    #     time.sleep(button_delay)
 
-    elif char == "1":
-        print("Number 1 pressed")
-        time.sleep(button_delay)
-    elif char == b"\x1b[A":
-        print("up")
-    elif char == "\x1b[B":
-        print("down")
-    elif char == "\x1b[C":
-        print("right")
-    elif char == "\x1b[D":
-        print("left")
+    # elif char == "w":
+    #     print("Up pressed")
+    #     time.sleep(button_delay)
+
+    # elif char == "s":
+    #     print("Down pressed")
+    #     time.sleep(button_delay)
+
+    # elif char == b"f":
+    #     print("f")
+    #     request_action("a")
+    #     time.sleep(button_delay)
+
+    # elif char == "1":
+    #     print("Number 1 pressed")
+    #     time.sleep(button_delay)
+    # elif char == b"\x1b[A":
+    #     print("up")
+    # elif char == "\x1b[B":
+    #     print("down")
+    # elif char == "\x1b[C":
+    #     print("right")
+    # elif char == "\x1b[D":
+    #     print("left")
